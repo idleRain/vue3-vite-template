@@ -1,0 +1,6 @@
+// rem相应式布局用这个
+$baseSize: 37.5;  // 和根元素字号大小一样就行(设计稿宽度 / 10)
+
+@function pxToRem($px) {
+  @return ($px / $baseSize) + rem;
+}
