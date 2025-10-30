@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useClickPosition } from '@/hooks'
+import { useClickPosition } from '@/composables'
 import { toast } from 'vue-sonner'
 
 defineOptions({ name: 'ClickExample' })

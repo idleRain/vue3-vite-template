@@ -1,30 +1,35 @@
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended'
 import eslintAutoImport from './.eslintrc-auto-import.js'
-import { defineConfig } from 'eslint/config'
-import pluginVue from 'eslint-plugin-vue'
-import tseslint from 'typescript-eslint'
+import { includeIgnoreFile } from '@eslint/compat'
+import prettier from 'eslint-config-prettier'
+import { fileURLToPath } from 'node:url'
+import vue from 'eslint-plugin-vue'
+import ts from 'typescript-eslint'
 import globals from 'globals'
 import js from '@eslint/js'
 
-export default defineConfig([
-  {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts,vue}'],
-    plugins: { js },
-    extends: ['js/recommended']
-  },
-  tseslint.configs.recommended,
-  pluginVue.configs['flat/recommended'],
+const gitignorePath = fileURLToPath(new URL('./.gitignore', import.meta.url))
+
+export default ts.config(
+  includeIgnoreFile(gitignorePath),
+  js.configs.recommended,
+  ts.configs.recommended,
   eslintPluginPrettier,
+  prettier,
+  ...vue.configs['flat/essential'],
   {
     languageOptions: {
-      sourceType: 'module',
-      globals: {
-        ...globals.browser,
-        ...eslintAutoImport.globals
-      },
+      globals: { ...globals.browser, ...globals.node }
+    }
+  },
+  {
+    files: ['**/*.vue'],
+    languageOptions: {
       parserOptions: {
-        parser: tseslint.parser,
-        ecmaVersion: 'latest'
+        parser: '@typescript-eslint/parser'
+      },
+      globals: {
+        ...eslintAutoImport.globals
       }
     }
   },
@@ -36,13 +41,6 @@ export default defineConfig([
       '@typescript-eslint/no-unused-vars': 'warn',
       // 允许组件名为单个单词
       'vue/multi-word-component-names': 'off',
-      // 组件命名方式
-      'vue/component-name-in-template-casing': [
-        'error',
-        // 'kebab-case', // 分隔命名
-        'PascalCase', // 大驼峰
-        { registeredComponentsOnly: false, ignores: [] }
-      ],
       // 空标签自闭合
       'vue/html-self-closing': [
         'warn',
@@ -60,10 +58,30 @@ export default defineConfig([
         {
           allowedNames: ['that'] // this可用的局部变量名称
         }
-      ]
+      ],
+      'vue/no-export-in-script-setup': 'off',
+      // 使用大驼峰命名
+      'vue/component-definition-name-casing': ['error', 'PascalCase'],
+      // 模板中使用也必须用大驼峰
+      'vue/component-name-in-template-casing': [
+        'error',
+        // 'kebab-case', // 分隔命名
+        'PascalCase', // 大驼峰
+        { registeredComponentsOnly: false, ignores: ['/^kh-/'] }
+      ],
+      // 允许使用 v-html
+      'vue/no-v-html': 'off',
+      // 属性小写横线隔开
+      'vue/attribute-hyphenation': 'warn',
+      // 事件用小写横线隔开
+      'vue/v-on-event-hyphenation': 'warn',
+      // 是否使用 ts-expect-error
+      '@typescript-eslint/ban-ts-comment': 'off',
+      'vue/valid-v-html': 'off',
+      '@typescript-eslint/triple-slash-reference': 'off'
     }
   },
   {
-    ignores: ['node_modules', 'dist', 'public', 'src/components/ui']
+    ignores: ['./src/components/ui/*', './.eslintrc-auto-import.js']
   }
-])
+)

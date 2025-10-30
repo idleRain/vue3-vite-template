@@ -15,7 +15,6 @@
 - **🧭 Vue Router** - 官方路由解决方案
 - **🌐 Vue I18n** - 国际化解决方案，支持动态语言切换
 - **📦 Element Plus** - 企业级 UI 组件库
-- **🔗 Axios + Ky** - 双 HTTP 客户端支持，内置重试机制
 
 ### ✨ 特色功能
 
@@ -26,8 +25,6 @@
 - **🛡️ 类型安全** - 全面的 TypeScript 支持和严格模式
 - **🔧 开发工具** - ESLint + Prettier + Husky + CommitLint
 - **🧪 测试框架** - Vitest + Vue Test Utils + JSDOM，支持单元测试和覆盖率报告
-- **⚡ 热重载** - 快速的开发体验和构建性能
-- **🎯 路径别名** - `@/`、`~/`、`$ui/` 等便捷路径映射
 
 ## 📋 环境要求
 
@@ -156,7 +153,6 @@ vue3-vite-temp/
 - **🌞 亮色模式** - 默认亮色主题
 - **🌙 暗色模式** - 深色主题
 - **💻 系统模式** - 跟随系统主题设置
-- **🎭 平滑过渡** - 主题切换时的平滑动画效果
 
 ## 🧪 测试框架
 
@@ -181,33 +177,7 @@ src/
 │       └── storage.test.ts  # 存储工具测试
 ├── test/
 │   ├── setup.ts             # 测试环境配置
-│   └── globals.d.ts         # 全局类型声明
 └── vitest.config.ts         # Vitest 配置文件
-```
-
-### 编写测试
-
-```typescript
-import { describe, it, expect, beforeEach } from 'vitest'
-import { mount } from '@vue/test-utils'
-import MyComponent from '@/components/MyComponent.vue'
-
-describe('MyComponent', () => {
-  beforeEach(() => {
-    // 测试前的准备工作
-  })
-
-  it('should render correctly', () => {
-    const wrapper = mount(MyComponent)
-    expect(wrapper.text()).toContain('Hello World')
-  })
-
-  it('should handle user interaction', async () => {
-    const wrapper = mount(MyComponent)
-    await wrapper.find('button').trigger('click')
-    expect(wrapper.emitted()).toHaveProperty('click')
-  })
-})
 ```
 
 ### 测试配置
@@ -253,47 +223,6 @@ const { t } = useI18n()
 2. 添加对应的 JSON5 配置文件
 3. 在 `src/i18n/locales.ts` 中注册新语言
 
-## 🔧 开发规范
-
-### 代码风格
-
-- **组件命名**: PascalCase (如 `UserProfile.vue`)
-- **文件命名**: kebab-case (如 `user-profile.vue`)
-- **API 开发**: 使用 Composition API 和 `<script setup>`
-- **类型定义**: 重要功能必须提供 TypeScript 类型
-
-### Git 提交规范
-
-项目使用 [Conventional Commits](https://www.conventionalcommits.org/) 规范：
-
-```bash
-feat: 新功能
-fix: 修复问题
-docs: 文档更新
-style: 代码格式调整
-refactor: 代码重构
-test: 测试相关
-chore: 构建/工具相关
-```
-
-### 测试规范
-
-- **工具函数**: 所有公共工具函数必须编写单元测试
-- **组件测试**: 复杂组件需要编写组件测试
-- **覆盖率要求**: 核心功能代码覆盖率应达到 80% 以上
-- **测试文件命名**: 使用 `*.test.ts` 或 `*.spec.ts` 后缀
-- **测试组织**: 使用 `describe` 分组，`it` 描述具体测试用例
-
-### 开发流程
-
-1. **创建分支**: `git checkout -b feature/new-feature`
-2. **开发功能**: 编写代码并确保通过 lint 检查
-3. **编写测试**: 为新功能编写相应的单元测试
-4. **运行测试**: 确保所有测试通过 `npm run test`
-5. **提交代码**: `git commit -m "feat: add new feature"`
-6. **推送分支**: `git push origin feature/new-feature`
-7. **创建 PR**: 通过 GitHub/GitLab 创建合并请求
-
 ## 🚀 部署指南
 
 ### 构建优化
@@ -328,16 +257,6 @@ npm run build
 ## 📄 许可证
 
 本项目基于 [MIT License](./LICENSE) 开源协议。
-
-## 🙏 致谢
-
-感谢以下开源项目的支持：
-
-- [Vue.js](https://vuejs.org/)
-- [Vite](https://vitejs.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Shadcn-vue](https://www.shadcn-vue.com/)
-- [Element Plus](https://element-plus.org/)
 
 ---
 

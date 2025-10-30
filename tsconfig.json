@@ -43,7 +43,7 @@
     // 检查未使用的函数参数
     "noUnusedParameters": false,
     // 精确的可选属性类型检查
-    "exactOptionalPropertyTypes": true,
+    "exactOptionalPropertyTypes": false,
     // 检查函数是否在所有代码路径上都有返回值
     "noImplicitReturns": true,
     // 检查 switch 语句中是否有 fallthrough 情况
@@ -56,36 +56,25 @@
     "baseUrl": ".",
     // 路径映射配置
     "paths": {
-      "@/*": ["./src/*"],           // @ 映射到 src 目录
-      "~/*": ["./*"],               // ~ 映射到项目根目录
-      "$ui/*": ["./src/components/ui/*"]  // $ui 映射到 UI 组件目录
+      "@/*": ["./src/*"], // @ 映射到 src 目录
+      "~/*": ["./*"], // ~ 映射到项目根目录
+      "$ui/*": ["./src/components/ui/*"] // $ui 映射到 UI 组件目录
     },
     // 额外包含的类型定义
     "types": ["vite/client", "node", "vitest/globals"]
   },
   // 包含在编译中的文件模式
   "include": [
-    "src/**/*.ts",          // 所有 TypeScript 文件
-    "src/**/*.d.ts",        // 所有类型声明文件
-    "src/**/*.tsx",         // 所有 TSX 文件
-    "src/**/*.vue",         // 所有 Vue 单文件组件
-    "src/**/*.js",          // 所有 JavaScript 文件
-    "src/**/*.jsx",         // 所有 JSX 文件
-    "src/**/*.json",        // 所有 JSON 文件
-    "src/**/*.json5",       // 所有 JSON5 文件
-    "typings/**/*.d.ts",    // 全局类型声明
-    "components.d.ts",      // 组件类型声明
-    "vite.config.ts",       // Vite 配置文件
-    "tailwind.config.js",   // Tailwind CSS 配置
-    "postcss.config.js",    // PostCSS 配置
-    "prettier.config.js",   // Prettier 配置
-    "eslint.config.js"      // ESLint 配置
+    "src", // src 下的所有文件
+    "typings", // 全局类型声明
+    "vitest.config.ts", // Vitest 配置文件
+    "vite.config.ts" // Vite 配置文件
   ],
   // 排除在编译之外的目录
   "exclude": [
-    "node_modules",         // 依赖包目录
-    "dist",                 // 构建输出目录
-    "public",               // 静态资源目录
-    "src/components"
+    "node_modules", // 依赖包目录
+    "dist", // 构建输出目录
+    "public", // 静态资源目录
+    "src/components/ui"
   ]
 }

@@ -1,294 +1,164 @@
-import type {
-  UnifiedRequestConfig,
-  UnifiedError,
-  AxiosRequestConfig,
-  KyRequestOptions,
-  ResponseData,
-  KyError
-} from './types'
-import { USE_FETCH_API } from '@/constants/config'
-import type { AxiosInstance } from 'axios'
-import createAxios from './axiosInstance'
-import type { KyInstance } from 'ky'
-import createKy from './kyInstance'
+import ky, {
+  type BeforeRequestHook,
+  type AfterResponseHook,
+  type KyInstance,
+  type NormalizedOptions
+} from 'ky'
+import type { KyRequestOptions, ResponseData, KyError } from './types'
+import { RETRY_COUNT } from '@/constants/config'
+import { local } from '@/utils/storage.ts'
+import { toast } from 'vue-sonner'
 
-// 创建请求实例
-const kyRequest = createKy()
-const axiosRequest = createAxios()
-
-// 请求方法包装器
-class RequestWrapper {
-  private readonly client: AxiosInstance | KyInstance
-  private readonly isKy: boolean
-
-  constructor(client: AxiosInstance | KyInstance, isKy: boolean) {
-    this.client = client
-    this.isKy = isKy
+// 请求拦截器
+const requestInterceptor: BeforeRequestHook = (request, options) => {
+  // 添加 token 到请求头
+  const token = local.get('token')
+  if (token) {
+    request.headers.set('Authorization', `Bearer ${token}`)
   }
 
-  /**
-   * 转换统一配置为对应客户端的配置
-   */
-  private transformConfig(config?: UnifiedRequestConfig): AxiosRequestConfig | KyRequestOptions {
-    if (!config) return {}
-
-    if (this.isKy) {
-      // Ky 配置转换
-      const kyConfig: KyRequestOptions = {}
-
-      // 只有当属性有值时才添加到配置中
-      if (config.showError !== undefined) {
-        kyConfig.showError = config.showError
-      }
-
-      if (config.errorMessage !== undefined) {
-        kyConfig.errorMessage = config.errorMessage
-      }
-
-      if (config.loading !== undefined) {
-        kyConfig.loading = config.loading
-      }
-
-      if (config.headers) {
-        kyConfig.headers = config.headers
-      }
-
-      if (config.timeout) {
-        kyConfig.timeout = config.timeout
-      }
-
-      if (config.params) {
-        kyConfig.searchParams = config.params
-      }
-
-      if (config.credentials !== undefined) {
-        kyConfig.credentials = config.credentials ? 'include' : 'omit'
-      }
-
-      return kyConfig
-    } else {
-      // Axios 配置转换
-      const axiosConfig: AxiosRequestConfig = {}
-
-      // 只有当属性有值时才添加到配置中
-      if (config.showError !== undefined) {
-        axiosConfig.showError = config.showError
-      }
-
-      if (config.errorMessage !== undefined) {
-        axiosConfig.errorMessage = config.errorMessage
-      }
-
-      if (config.loading !== undefined) {
-        axiosConfig.loading = config.loading
-      }
-
-      if (config.headers) {
-        axiosConfig.headers = config.headers
-      }
-
-      if (config.timeout) {
-        axiosConfig.timeout = config.timeout
-      }
-
-      if (config.params) {
-        axiosConfig.params = config.params
-      }
-
-      if (config.credentials !== undefined) {
-        axiosConfig.withCredentials = config.credentials
-      }
-
-      return axiosConfig
-    }
+  // 设置默认 Content-Type
+  if (!request.headers.get('Content-Type')) {
+    request.headers.set('Content-Type', 'application/json')
   }
 
-  /**
-   * GET 请求
-   */
-  async get<T = any>(url: string, config?: UnifiedRequestConfig): Promise<T> {
-    try {
-      const transformedConfig = this.transformConfig(config)
-
-      if (this.isKy) {
-        const kyClient = this.client as KyInstance
-        return await kyClient.get(url, transformedConfig as KyRequestOptions).json<T>()
-      } else {
-        const axiosClient = this.client as AxiosInstance
-        const response = await axiosClient.get<ResponseData<T>>(
-          url,
-          transformedConfig as AxiosRequestConfig
-        )
-        return response as unknown as T
-      }
-    } catch (error) {
-      throw this.normalizeError(error)
-    }
+  // GET 请求添加时间戳防止缓存
+  if (options.method === 'get' || !options.method) {
+    const url = new URL(request.url)
+    url.searchParams.set('_t', Date.now().toString())
+    return new Request(url.toString(), request)
   }
 
-  /**
-   * POST 请求
-   */
-  async post<T = any>(url: string, data?: any, config?: UnifiedRequestConfig): Promise<T> {
-    try {
-      const transformedConfig = this.transformConfig(config)
+  return request
+}
 
-      if (this.isKy) {
-        const kyClient = this.client as KyInstance
-        return await kyClient
-          .post(url, {
-            json: data,
-            ...(transformedConfig as KyRequestOptions)
-          })
-          .json<T>()
-      } else {
-        const axiosClient = this.client as AxiosInstance
-        const response = await axiosClient.post<ResponseData<T>>(
-          url,
-          data,
-          transformedConfig as AxiosRequestConfig
-        )
-        return response as unknown as T
+// 响应拦截器
+const responseInterceptor: AfterResponseHook = async (_request, options, response) => {
+  // 将 options 断言为我们的扩展类型
+  const customOptions = options as NormalizedOptions & KyRequestOptions
+
+  try {
+    // 处理成功响应
+    if (response.ok) {
+      const contentType = response.headers.get('content-type')
+
+      // 如果是 JSON 响应
+      if (contentType?.includes('application/json')) {
+        const data = (await response.json()) as ResponseData
+
+        // 处理业务逻辑错误
+        if (data.code !== undefined && data.code !== 0) {
+          const errorMessage = customOptions.errorMessage || data.message || '请求失败'
+
+          if (customOptions.showError !== false) {
+            toast.error(errorMessage)
+          }
+
+          const error = new Error(errorMessage) as KyError
+          error.status = response.status
+          error.data = data
+          error.response = response
+          throw error
+        }
+
+        // 返回业务数据
+        return data.data !== undefined ? data.data : data
       }
-    } catch (error) {
-      throw this.normalizeError(error)
-    }
-  }
 
-  /**
-   * PUT 请求
-   */
-  async put<T = any>(url: string, data?: any, config?: UnifiedRequestConfig): Promise<T> {
-    try {
-      const transformedConfig = this.transformConfig(config)
-
-      if (this.isKy) {
-        const kyClient = this.client as KyInstance
-        return await kyClient
-          .put(url, {
-            json: data,
-            ...(transformedConfig as KyRequestOptions)
-          })
-          .json<T>()
-      } else {
-        const axiosClient = this.client as AxiosInstance
-        const response = await axiosClient.put<ResponseData<T>>(
-          url,
-          data,
-          transformedConfig as AxiosRequestConfig
-        )
-        return response as unknown as T
-      }
-    } catch (error) {
-      throw this.normalizeError(error)
-    }
-  }
-
-  /**
-   * PATCH 请求
-   */
-  async patch<T = any>(url: string, data?: any, config?: UnifiedRequestConfig): Promise<T> {
-    try {
-      const transformedConfig = this.transformConfig(config)
-
-      if (this.isKy) {
-        const kyClient = this.client as KyInstance
-        return await kyClient
-          .patch(url, {
-            json: data,
-            ...(transformedConfig as KyRequestOptions)
-          })
-          .json<T>()
-      } else {
-        const axiosClient = this.client as AxiosInstance
-        const response = await axiosClient.patch<ResponseData<T>>(
-          url,
-          data,
-          transformedConfig as AxiosRequestConfig
-        )
-        return response as unknown as T
-      }
-    } catch (error) {
-      throw this.normalizeError(error)
-    }
-  }
-
-  /**
-   * DELETE 请求
-   */
-  async delete<T = any>(url: string, config?: UnifiedRequestConfig): Promise<T> {
-    try {
-      const transformedConfig = this.transformConfig(config)
-
-      if (this.isKy) {
-        const kyClient = this.client as KyInstance
-        return await kyClient.delete(url, transformedConfig as KyRequestOptions).json<T>()
-      } else {
-        const axiosClient = this.client as AxiosInstance
-        const response = await axiosClient.delete<ResponseData<T>>(
-          url,
-          transformedConfig as AxiosRequestConfig
-        )
-        return response as unknown as T
-      }
-    } catch (error) {
-      throw this.normalizeError(error)
-    }
-  }
-
-  /**
-   * 统一错误处理
-   */
-  private normalizeError(error: any): UnifiedError {
-    const unifiedError = new Error() as UnifiedError
-
-    if (this.isKy && error && typeof error === 'object') {
-      // Ky 错误处理
-      const kyError = error as KyError
-      unifiedError.message = kyError.message || '请求失败'
-      unifiedError.status = kyError.status || 0
-      unifiedError.data = kyError.data
-    } else if (error.response) {
-      // Axios 错误处理
-      unifiedError.message = error.message || '请求失败'
-      unifiedError.status = error.response.status || 0
-      unifiedError.data = error.response.data
-    } else {
-      // 其他错误
-      unifiedError.message = error.message || '未知错误'
-      unifiedError.status = 0
-      unifiedError.data = null
+      // 非 JSON 响应直接返回
+      return response
     }
 
-    return unifiedError
-  }
-
-  /**
-   * 获取原始客户端实例
-   */
-  get raw(): AxiosInstance | KyInstance {
-    return this.client
+    throw response
+  } catch (error) {
+    if (error instanceof Response) {
+      await handleErrorResponse(error, customOptions)
+    }
+    throw error
   }
 }
 
-// 创建统一的请求实例
-const kyRequestWrapper = new RequestWrapper(kyRequest, true)
-const axiosRequestWrapper = new RequestWrapper(axiosRequest, false)
+// 处理错误响应
+const handleErrorResponse = async (
+  response: Response,
+  options: NormalizedOptions & KyRequestOptions
+) => {
+  let errorMessage = options.errorMessage || '网络请求失败'
+  let errorData: any = null
 
-// 根据配置选择请求客户端，参数统一，可自由切换
-const request = USE_FETCH_API ? kyRequestWrapper : axiosRequestWrapper
+  try {
+    const contentType = response.headers.get('content-type')
+    if (contentType?.includes('application/json')) {
+      errorData = await response.json()
+      errorMessage = errorData.message || errorMessage
+    }
+  } catch {
+    // JSON 解析失败，使用默认错误消息
+  }
 
-// 导出实例和类型
-export { kyRequest, axiosRequest, kyRequestWrapper, axiosRequestWrapper, request, RequestWrapper }
+  // 根据状态码设置错误消息（如果没有自定义错误消息）
+  if (!options.errorMessage) {
+    switch (response.status) {
+      case 400:
+        errorMessage = '请求参数错误'
+        break
+      case 401:
+        errorMessage = '未授权，请重新登录'
+        // 清除本地 token 并跳转到登录页
+        local.rm('token')
+        window.location.href = '/login'
+        break
+      case 403:
+        errorMessage = '拒绝访问'
+        break
+      case 404:
+        errorMessage = '请求的资源不存在'
+        break
+      case 500:
+        errorMessage = '服务器内部错误'
+        break
+      default:
+        errorMessage = `请求失败 (${response.status})`
+    }
+  }
+
+  // 显示错误提示
+  if (options.showError !== false) {
+    toast.error(errorMessage)
+  }
+
+  const error = new Error(errorMessage) as KyError
+  error.status = response.status
+  error.data = errorData
+  error.response = response
+
+  console.error('请求错误:', error)
+  throw error
+}
+
+// 创建并配置Ky实例
+const request: KyInstance = ky.create({
+  prefixUrl: import.meta.env.VITE_BASE_URL || '/api',
+  timeout: 15000,
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  // 请求失败后重试配置
+  retry: {
+    limit: RETRY_COUNT,
+    methods: ['get', 'put', 'head', 'delete', 'options', 'trace'],
+    statusCodes: [408, 413, 429, 500, 502, 503, 504],
+    delay: attemptCount => 0.3 * 2 ** (attemptCount - 1) * 1000 // 指数退避
+  },
+  hooks: {
+    beforeRequest: [requestInterceptor],
+    afterResponse: [responseInterceptor]
+  }
+})
+
+// 导出Ky实例
+export { request }
+export default request
 
 // 重新导出类型
-export type {
-  UnifiedRequestConfig,
-  UnifiedError,
-  AxiosRequestConfig,
-  KyRequestOptions,
-  ResponseData,
-  KyError
-} from './types'
-
-export default request
+export type { KyRequestOptions, ResponseData, KyError } from './types'

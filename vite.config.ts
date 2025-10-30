@@ -10,6 +10,7 @@ import { resolve } from 'node:path'
 // https://vite.dev/config/
 export default ({ mode }: ConfigEnv) => {
   const env = loadEnv(mode, process.cwd())
+
   return defineConfig({
     base: '/',
     plugins: [
@@ -30,7 +31,7 @@ export default ({ mode }: ConfigEnv) => {
         dirs: [resolve(__dirname, 'src/components/**')],
         extensions: ['vue'],
         deep: true,
-        dts: true,
+        dts: 'typings/components.d.ts',
         resolvers: [ElementPlusResolver()]
       })
     ],
@@ -38,8 +39,8 @@ export default ({ mode }: ConfigEnv) => {
       port: Number(env.VITE_SERVER_PORT),
       host: '0.0.0.0',
       proxy: {
-        [env.VITE_BASE_URL as string]: {
-          target: env.VITE_PROXY_URL,
+        [<string>env.VITE_BASE_URL]: {
+          target: <string>env.VITE_PROXY_URL,
           ws: true,
           changeOrigin: true,
           rewrite: (path: string) => path.replace(new RegExp(`^${env.VITE_BASE_URL}`), '')
@@ -60,7 +61,7 @@ export default ({ mode }: ConfigEnv) => {
     build: {
       sourcemap: mode === 'dev',
       assetsDir: 'static/js',
-      rollupOptions: {
+      rolldownOptions: {
         output: {
           chunkFileNames: 'static/js/[name]-[hash].js',
           entryFileNames: 'static/js/[name]-[hash].js',
@@ -84,29 +85,6 @@ export default ({ mode }: ConfigEnv) => {
           drop_console: true,
           drop_debugger: true
         }
-      }
-    },
-    // vitest 配置
-    test: {
-      globals: true,
-      environment: 'jsdom',
-      setupFiles: ['./src/test/setup.ts'],
-      coverage: {
-        provider: 'v8',
-        reporter: ['text', 'json', 'html'],
-        exclude: [
-          'node_modules/',
-          'src/test/',
-          '**/*.d.ts',
-          '**/*.config.*',
-          '**/vite.config.*',
-          '**/vitest.config.*',
-          '**/dist/**',
-          '**/build/**',
-          '**/.{idea,git,cache,output,temp}/**',
-          '**/coverage/**'
-        ],
-        include: ['src/**/*.{ts,vue}']
       }
     }
   })

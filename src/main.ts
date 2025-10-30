@@ -1,7 +1,5 @@
-import 'element-plus/dist/index.css'
 import { setupI18n } from '@/i18n'
 import { createApp } from 'vue'
-import 'vue-sonner/style.css'
 import router from '@/router'
 import '@/styles/index.css'
 import App from './App.vue'
@@ -21,9 +19,10 @@ const bootstrap = async () => {
     console.groupEnd()
   }
 
+  await setupI18n(app)
+
   app.use(pinia)
   app.use(router)
-  await setupI18n(app)
 
   app.mount('#app')
 }

@@ -1,7 +1,9 @@
-import * as example from './example'
+import * as ExampleAPI from './example'
 
 const API = {
-  example //公共模块
+  example: ExampleAPI // 示例
 }
+
+export { API, ExampleAPI }
 
 export default API
