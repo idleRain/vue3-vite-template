@@ -1,5 +1,54 @@
 {
-  // zhushi
+  // layout 英文语言包
   playground: 'Playground',
-  languageSwitch: 'Switch Languages'
+  languageSwitch: 'Switch Languages',
+  sidebar: {
+    // Team switcher
+    teams: {
+      acmeInc: 'Acme Inc',
+      acmeCorp: 'Acme Corp.',
+      evilCorp: 'Evil Corp.'
+    },
+    // Team plans
+    plans: {
+      enterprise: 'Enterprise',
+      startup: 'Startup',
+      free: 'Free'
+    },
+    // Main nav
+    nav: {
+      playground: {
+        title: 'Playground',
+        history: 'History',
+        starred: 'Starred',
+        settings: 'Settings'
+      },
+      models: {
+        title: 'Models',
+        genesis: 'Genesis',
+        explorer: 'Explorer',
+        quantum: 'Quantum'
+      },
+      documentation: {
+        title: 'Documentation',
+        introduction: 'Introduction',
+        getStarted: 'Get Started',
+        tutorials: 'Tutorials',
+        changelog: 'Changelog'
+      },
+      settings: {
+        title: 'Settings',
+        general: 'General',
+        team: 'Team',
+        billing: 'Billing',
+        limits: 'Limits'
+      }
+    },
+    // Project list
+    projects: {
+      designEngineering: 'Design Engineering',
+      salesMarketing: 'Sales & Marketing',
+      travel: 'Travel'
+    }
+  }
 }

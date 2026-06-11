@@ -28,7 +28,7 @@
 
 ## 📋 环境要求
 
-- **Node.js** >= 20.0.0
+- **Node.js** >= 22.0.0
 - **pnpm** >= 8.0.0 (推荐) 或 **npm** >= 9.0.0
 
 ## 🚀 快速开始
@@ -66,29 +66,6 @@ npm run build
 
 # 预览构建结果
 npm run preview
-```
-
-## ⚙️ 环境配置
-
-项目支持多环境配置，复制并修改环境变量文件：
-
-```bash
-cp .env.example .env
-```
-
-### 环境变量说明
-
-```ini
-# 开发服务器配置
-VITE_SERVER_PORT=6789                    # 开发服务器端口
-
-# API 配置
-VITE_PROXY_URL=http://localhost:8080     # API 代理目标地址
-VITE_BASE_URL=/api                       # API 基础路径
-
-# 应用配置
-VITE_APP_LOCALE=zh                       # 默认语言 (zh/en)
-VITE_APP_TITLE=Vue3 Vite Template        # 应用标题
 ```
 
 ## 📜 可用脚本
@@ -243,16 +220,6 @@ npm run build
 # 2. 部署 dist/ 目录到服务器
 # 支持 Nginx、Apache、CDN 等多种部署方式
 ```
-
-## 🤝 贡献指南
-
-欢迎提交 Issue 和 Pull Request！
-
-1. **Fork** 本仓库
-2. **创建**功能分支 (`git checkout -b feature/AmazingFeature`)
-3. **提交**更改 (`git commit -m 'feat: add some AmazingFeature'`)
-4. **推送**分支 (`git push origin feature/AmazingFeature`)
-5. **打开** Pull Request
 
 ## 📄 许可证
 

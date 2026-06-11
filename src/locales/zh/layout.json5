@@ -1,5 +1,54 @@
 {
   // layout 中文语言包
   playground: "演练场",
-  languageSwitch: "切换语言"
+  languageSwitch: "切换语言",
+  sidebar: {
+    // 团队切换器
+    teams: {
+      acmeInc: "Acme 公司",
+      acmeCorp: "Acme 集团",
+      evilCorp: "Evil 集团"
+    },
+    // 团队套餐
+    plans: {
+      enterprise: "企业版",
+      startup: "创业版",
+      free: "免费版"
+    },
+    // 主导航
+    nav: {
+      playground: {
+        title: "演练场",
+        history: "历史记录",
+        starred: "星标",
+        settings: "设置"
+      },
+      models: {
+        title: "模型",
+        genesis: "Genesis",
+        explorer: "Explorer",
+        quantum: "Quantum"
+      },
+      documentation: {
+        title: "文档",
+        introduction: "简介",
+        getStarted: "快速开始",
+        tutorials: "教程",
+        changelog: "更新日志"
+      },
+      settings: {
+        title: "设置",
+        general: "通用",
+        team: "团队",
+        billing: "账单",
+        limits: "限额"
+      }
+    },
+    // 项目列表
+    projects: {
+      designEngineering: "设计工程",
+      salesMarketing: "销售与市场",
+      travel: "出行"
+    }
+  }
 }

@@ -10,7 +10,7 @@ import dayjs from 'dayjs'
 const elementLocale = ref<Language>(defaultLocale)
 const $t = i18n.global.t
 
-const modules = import.meta.glob('../locales/**/*.json?(5)')
+const modules = import.meta.glob(['../locales/**/*.json', '../locales/**/*.json5'])
 const localesMap = loadLocalesMapFromDir(
   /^\.\.\/locales\/([^/]+)\/(.*?)(?:\.json5?|\.json)$/,
   modules
@@ -84,7 +84,6 @@ async function switchLanguage(lang: SupportedLanguagesType) {
 async function setupI18n(app: App, options: LocaleSetupOptions = {}) {
   const defaultLang: SupportedLanguagesType =
     local.get<SupportedLanguagesType>('lang') ?? import.meta.env.VITE_APP_LOCALE ?? 'zh'
-
   const { loadLocaleMessages: coreLoadMessages } = await coreSetup(app, {
     defaultLocale: defaultLang,
     loadMessages: async (lang: SupportedLanguagesType) => {

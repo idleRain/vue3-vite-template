@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronsUpDown, Plus } from 'lucide-vue-next'
+import { ChevronsUpDown, Plus } from '@lucide/vue'
 
 import { type Component } from 'vue'
 

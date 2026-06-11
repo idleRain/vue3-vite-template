@@ -45,7 +45,7 @@ const prettierConfig = {
     // css 属性
     'prettier-plugin-css-order',
     // 导入排序
-    './node_modules/prettier-plugin-sort-imports/dist/index.js'
+    'prettier-plugin-sort-imports'
   ],
   tailwindConfig: './tailwind.config.js',
   tailwindStylesheet: './src/styles/index.css',

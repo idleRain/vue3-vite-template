@@ -9,11 +9,10 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(to => {
   loading.show()
   nProgress.start()
-  document.title = to.meta.title!
-  next()
+  document.title = to.meta.title ?? import.meta.env.VITE_APP_TITLE
 })
 
 router.afterEach(() => {

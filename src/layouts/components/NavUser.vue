@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-vue-next'
+import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from '@lucide/vue'
 
 import { useSidebar } from '$ui/sidebar'
 

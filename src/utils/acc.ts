@@ -9,8 +9,7 @@
  * @return {number}
  */
 export function accAdd(num1: number, num2: number): number {
-  let r1 = 0,
-    r2 = 0
+  let r1, r2
   try {
     r1 = (num1.toString().split('.')[1] || []).length
   } catch {

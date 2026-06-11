@@ -1,6 +1,6 @@
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended'
 import eslintAutoImport from './.eslintrc-auto-import.js'
-import { includeIgnoreFile } from '@eslint/compat'
+import { includeIgnoreFile } from 'eslint/config'
 import prettier from 'eslint-config-prettier'
 import { fileURLToPath } from 'node:url'
 import vue from 'eslint-plugin-vue'
@@ -11,7 +11,7 @@ import js from '@eslint/js'
 const gitignorePath = fileURLToPath(new URL('./.gitignore', import.meta.url))
 
 export default ts.config(
-  includeIgnoreFile(gitignorePath),
+  includeIgnoreFile(gitignorePath, { gitignoreResolution: true }),
   js.configs.recommended,
   ts.configs.recommended,
   eslintPluginPrettier,

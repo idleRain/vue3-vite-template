@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronRight, type LucideIcon } from 'lucide-vue-next'
+import { ChevronRight, type LucideIcon } from '@lucide/vue'
 
 type Item = {
   title: string

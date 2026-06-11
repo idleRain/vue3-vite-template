@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Languages } from 'lucide-vue-next'
+import { Languages } from '@lucide/vue'
 import { switchLanguage } from '@/i18n'
 
 const { t } = useI18n()
@@ -8,7 +8,7 @@ const { t } = useI18n()
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger>
-      <Button size="icon" variant="ghost" class="h-9 w-9 cursor-pointer">
+      <Button size="default" variant="ghost" class="h-9 w-9 cursor-pointer">
         <Languages :size="24" />
       </Button>
     </DropdownMenuTrigger>
