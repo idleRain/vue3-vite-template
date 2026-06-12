@@ -75,6 +75,28 @@ export default ts.config(
       'vue/attribute-hyphenation': 'warn',
       // 事件用小写横线隔开
       'vue/v-on-event-hyphenation': 'warn',
+      // 模板属性排序：指令(v-for/v-if 等) > ref/key > v-model > 动态 prop > 静态 prop > 事件 > v-text/v-html
+      'vue/attributes-order': [
+        'warn',
+        {
+          order: [
+            'DEFINITION', // is="header"
+            'LIST_RENDERING', // v-for
+            'CONDITIONALS', // v-if / v-else-if / v-else / v-show
+            'RENDER_MODIFIERS', // v-pre / v-once
+            'GLOBAL', // id / v-bind="obj"
+            'UNIQUE', // ref / key
+            'SLOT', // v-slot
+            'TWO_WAY_BINDING', // v-model
+            'OTHER_DIRECTIVES', // 其它自定义指令
+            'ATTR_DYNAMIC', // :prop="val"
+            ['ATTR_STATIC', 'ATTR_SHORTHAND_BOOL'], // prop="val" / boolean-prop
+            'EVENTS', // @click / v-on
+            'CONTENT' // v-text / v-html
+          ],
+          alphabetical: false // 不强制组内字母序
+        }
+      ],
       // 是否使用 ts-expect-error
       '@typescript-eslint/ban-ts-comment': 'off',
       'vue/valid-v-html': 'off',
