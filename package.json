@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "author": "IdleRain",
+  "description": "一个开箱即用且技术栈最新的 Vue + Vite + TypeScript 项目基础模板",
   "scripts": {
     "start": "npm run dev",
     "dev": "vite --mode dev",
@@ -21,6 +22,7 @@
     "lint-staged": "lint-staged"
   },
   "dependencies": {
+    "@internationalized/date": "^3.12.2",
     "@lucide/vue": "^1.17.0",
     "@vee-validate/zod": "^4.15.1",
     "@vueuse/core": "^14.3.0",

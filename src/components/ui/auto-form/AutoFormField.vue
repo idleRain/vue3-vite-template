@@ -1,5 +1,5 @@
-<script setup lang="ts" generic="U extends ZodAny">
-import type { ZodAny } from 'zod'
+<script setup lang="ts" generic="U extends ZodType">
+import type { ZodType } from 'zod'
 import type { Config, ConfigItem, Shape } from './interface'
 import { computed } from 'vue'
 import { DEFAULT_ZOD_HANDLERS, INPUT_COMPONENTS } from './constant'
@@ -30,7 +30,7 @@ const { isDisabled, isHidden, isRequired, overrideOptions } = useDependencies(pr
       ? typeof config.component === 'string'
         ? INPUT_COMPONENTS[config.component!]
         : config.component
-      : INPUT_COMPONENTS[DEFAULT_ZOD_HANDLERS[shape.type]] "
+      : INPUT_COMPONENTS[DEFAULT_ZOD_HANDLERS[shape.type]!] "
     v-if="!isHidden"
     :field-name="fieldName"
     :label="shape.schema?.description"

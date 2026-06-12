@@ -12,10 +12,11 @@ const currentTheme = computed(() => {
 })
 
 const toggleTheme = () => {
-  const themeOrder = ['light', 'dark', 'auto']
-  const currentIndex = themeOrder.indexOf(mode.value)
+  const themeOrder = ['light', 'dark', 'auto'] as const
+  const currentIndex = themeOrder.indexOf(mode.value as (typeof themeOrder)[number])
   const nextIndex = (currentIndex + 1) % themeOrder.length
-  mode.value = themeOrder[nextIndex]
+  // 上面用 % 保证 nextIndex 必在范围内，这里安全断言非 undefined
+  mode.value = themeOrder[nextIndex]!
 }
 
 const getThemeTitle = () => {

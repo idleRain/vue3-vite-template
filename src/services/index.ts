@@ -5,12 +5,12 @@ import ky, {
   type NormalizedOptions
 } from 'ky'
 import type { KyRequestOptions, ResponseData, KyError } from './types'
-import { RETRY_COUNT } from '@/constants/config'
+import { REQUEST_TIMEOUT, RETRY_COUNT } from '@/constants/config'
 import { local } from '@/utils/storage.ts'
 import { toast } from 'vue-sonner'
 
 // 请求拦截器
-const requestInterceptor: BeforeRequestHook = (request, options) => {
+const requestInterceptor: BeforeRequestHook = ({ request, options }) => {
   // 添加 token 到请求头
   const token = local.get('token')
   if (token) {
@@ -33,7 +33,7 @@ const requestInterceptor: BeforeRequestHook = (request, options) => {
 }
 
 // 响应拦截器
-const responseInterceptor: AfterResponseHook = async (_request, options, response) => {
+const responseInterceptor: AfterResponseHook = async ({ options, response }) => {
   // 将 options 断言为我们的扩展类型
   const customOptions = options as NormalizedOptions & KyRequestOptions
 
@@ -138,8 +138,8 @@ const handleErrorResponse = async (
 
 // 创建并配置Ky实例
 const request: KyInstance = ky.create({
-  prefixUrl: import.meta.env.VITE_BASE_URL || '/api',
-  timeout: 15000,
+  prefix: import.meta.env.VITE_BASE_URL ?? '/api',
+  timeout: REQUEST_TIMEOUT,
   headers: {
     'Content-Type': 'application/json'
   },

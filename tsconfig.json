@@ -52,8 +52,6 @@
     "noUncheckedIndexedAccess": true,
     // 检查继承时是否使用了 override 关键字
     "noImplicitOverride": true,
-    // 设置基础路径为项目根目录
-    "baseUrl": ".",
     // 路径映射配置
     "paths": {
       "@/*": ["./src/*"], // @ 映射到 src 目录
