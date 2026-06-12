@@ -6,8 +6,12 @@ import API from '@/api'
 defineOptions({ name: 'Example' })
 
 const { t } = useI18n()
+
+const loading = ref(false)
+
 const sendRequest = async () => {
   try {
+    loading.value = true
     const data = await API.example.getHello()
     console.log(data)
     toast.success('success', {
@@ -20,6 +24,8 @@ const sendRequest = async () => {
       description: t('example.sendError', [e.message]),
       position: 'top-center'
     })
+  } finally {
+    loading.value = false
   }
 }
 </script>
@@ -28,7 +34,10 @@ const sendRequest = async () => {
   <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
     <div class="grid auto-rows-min gap-4 md:grid-cols-3">
       <div class="flex items-center justify-center rounded-xl bg-muted/50">
-        <Button @click="sendRequest">{{ t('example.send') }}</Button>
+        <Button :disabled="loading" @click="sendRequest">
+          <Spinner v-show="loading" class="animate-spin" />
+          <span>{{ t('example.send') }}</span>
+        </Button>
       </div>
       <div class="aspect-video rounded-xl bg-muted/50">
         <ElDescriptions :title="t('layout.playground')" />

@@ -33,9 +33,9 @@ const { isMobile } = useSidebar()
             </SidebarMenuAction>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            class="w-48 rounded-lg"
             :side="isMobile ? 'bottom' : 'right'"
             :align="isMobile ? 'end' : 'start'"
+            class="w-48 rounded-lg"
           >
             <DropdownMenuItem>
               <Folder class="text-muted-foreground" />

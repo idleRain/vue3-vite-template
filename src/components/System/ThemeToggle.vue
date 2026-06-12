@@ -32,9 +32,9 @@ const getThemeTitle = () => {
 <template>
   <div class="flex items-center">
     <Button
+      :title="getThemeTitle()"
       variant="ghost"
       size="icon"
-      :title="getThemeTitle()"
       class="relative h-9 w-9 cursor-pointer overflow-hidden transition-all duration-200 hover:bg-accent/80"
       @click="toggleTheme"
     >

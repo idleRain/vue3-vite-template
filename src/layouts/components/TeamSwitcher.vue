@@ -41,10 +41,10 @@ const activeTeam = computed(() => props.teams[0])
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          class="w-[--reka-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-          align="start"
           :side="isMobile ? 'bottom' : 'right'"
           :side-offset="4"
+          class="w-[--reka-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+          align="start"
         >
           <DropdownMenuLabel class="text-xs text-muted-foreground"> Teams </DropdownMenuLabel>
           <DropdownMenuItem

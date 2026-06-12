@@ -31,8 +31,8 @@ const dotStyles = computed(() => ({
 <template>
   <div ref="containerRef" class="relative h-full w-full cursor-pointer">
     <div
-      class="absolute z-10 h-[16px] w-[16px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#41b883]"
       :style="dotStyles"
+      class="absolute z-10 h-[16px] w-[16px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#41b883]"
     />
     <div
       class="pointer-events-none absolute inset-0 flex items-center justify-center text-3xl text-[#999]"

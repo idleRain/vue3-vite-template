@@ -35,10 +35,10 @@ const { isMobile } = useSidebar()
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          class="w-[--reka-dropdown-menu-trigger-width] min-w-56 rounded-lg"
           :side="isMobile ? 'bottom' : 'right'"
-          align="end"
           :side-offset="4"
+          class="w-[--reka-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+          align="end"
         >
           <DropdownMenuLabel class="p-0 font-normal">
             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">

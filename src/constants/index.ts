@@ -1,3 +1,9 @@
 import * as config from './config'
 
-export { config }
+const constants = {
+  config
+}
+
+export { config, constants }
+
+export default constants
