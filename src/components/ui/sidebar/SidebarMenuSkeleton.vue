@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, type HTMLAttributes } from 'vue'
+import type { HTMLAttributes } from "vue"
+import { computed } from "vue"
 import { cn } from '@/utils'
 import { Skeleton } from '@/components/ui/skeleton'
 
 const props = defineProps<{
   showIcon?: boolean
-  class?: HTMLAttributes['class']
+  class?: HTMLAttributes["class"]
 }>()
 
 const width = computed(() => {

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { HTMLAttributes } from 'vue'
-import { MoreHorizontal } from '@lucide/vue'
+import type { HTMLAttributes } from "vue"
+import { MoreHorizontal } from "@lucide/vue"
 import { cn } from '@/utils'
 
 const props = defineProps<{
-  class?: HTMLAttributes['class']
+  class?: HTMLAttributes["class"]
 }>()
 </script>
 
