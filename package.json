@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "author": "IdleRain",
-  "description": "一个开箱即用且技术栈最新的 Vue + Vite + TypeScript 项目基础模板",
+  "description": "一个开箱即用且技术栈最新的 Vue + Vite + TypeScript 轻量化项目基础模板",
+  "license": "MIT",
   "scripts": {
     "start": "npm run dev",
     "dev": "vite --mode dev",
@@ -18,7 +19,7 @@
     "test:watch": "vitest watch",
     "format": "prettier --write \"src/**/*.{html,vue,ts,js,cjs,mjs}\"",
     "lint": "eslint src --fix --ext .ts,.tsx,.vue,.js,.jsx --max-warnings 0",
-    "prepare": "husky install",
+    "prepare": "husky",
     "lint-staged": "lint-staged"
   },
   "dependencies": {
@@ -61,7 +62,6 @@
     "@vue/compiler-sfc": "^3.5.35",
     "@vue/test-utils": "^2.4.11",
     "@vue/tsconfig": "^0.9.1",
-    "autoprefixer": "^10.5.0",
     "eslint": "^10.4.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
@@ -70,14 +70,12 @@
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
     "lint-staged": "^17.0.7",
-    "postcss": "^8.5.15",
     "prettier": "^3.8.4",
     "prettier-plugin-css-order": "^2.2.0",
     "prettier-plugin-sort-imports": "^1.8.11",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "sass": "^1.100.0",
     "tailwindcss": "^4.3.0",
-    "terser": "^5.48.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.0",
     "unplugin-auto-import": "^21.0.0",
@@ -87,14 +85,18 @@
     "vitest": "^4.1.8",
     "vue-tsc": "^3.3.4"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*.{html,vue,ts,js,cjs,mjs}": [
-      "prettier --write"
+      "prettier --write",
+      "eslint --fix --max-warnings 0"
     ]
+  },
+  "homepage": "https://github.com/idleRain/vue3-vite-template#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/idleRain/vue3-vite-template.git"
+  },
+  "bugs": {
+    "url": "https://github.com/idleRain/vue3-vite-template/issues"
   }
 }

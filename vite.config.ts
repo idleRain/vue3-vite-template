@@ -10,6 +10,8 @@ import { resolve } from 'node:path'
 // https://vite.dev/config/
 export default ({ mode }: ConfigEnv) => {
   const env = loadEnv(mode, process.cwd())
+  const isProd = mode === 'prod'
+  const isDev = mode === 'dev'
 
   return defineConfig({
     base: '/',
@@ -47,9 +49,6 @@ export default ({ mode }: ConfigEnv) => {
         }
       }
     },
-    css: {
-      postcss: './postcss.config.js'
-    },
     resolve: {
       alias: {
         '@': resolve(__dirname, './src'),
@@ -59,7 +58,7 @@ export default ({ mode }: ConfigEnv) => {
     },
     // 打包构建配置
     build: {
-      sourcemap: mode === 'dev',
+      sourcemap: isDev,
       assetsDir: 'static/js',
       rolldownOptions: {
         output: {
@@ -95,15 +94,15 @@ export default ({ mode }: ConfigEnv) => {
               // 业务侧共享代码：被 ≥2 个入口/异步 chunk 引用且 >10KB
               { name: 'common', minShareCount: 2, minSize: 10000, priority: 5 }
             ]
+          },
+          // oxc minifier 压缩选项
+          minify: {
+            compress: {
+              // 生产环境剥离 console 和 debugger
+              dropConsole: isProd,
+              dropDebugger: isProd
+            }
           }
-        }
-      },
-      // 打包去掉 console 和 debugger
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true
         }
       }
     }

@@ -117,7 +117,6 @@ vue3-vite-temp/
 ├── typings/                 # 全局类型声明
 ├── .env                     # 环境变量
 ├── components.d.ts          # 组件类型声明
-├── tailwind.config.js       # Tailwind CSS 配置
 ├── tsconfig.json            # TypeScript 配置
 ├── vite.config.ts           # Vite 配置
 └── vitest.config.ts         # Vitest 测试配置
