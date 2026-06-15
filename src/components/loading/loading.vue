@@ -6,6 +6,10 @@
   </div>
 </template>
 
+<!--
+  注意：首屏 loading（index.html 中的 .app-loading）使用了同样的视觉效果，
+  修改本组件样式时请同步更新 index.html 顶部 <style> 内的 .app-loading__loader 样式。
+-->
 <style scoped>
 .loader {
   animation: l15 1s infinite linear;

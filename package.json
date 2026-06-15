@@ -86,9 +86,12 @@
     "vue-tsc": "^3.3.4"
   },
   "lint-staged": {
-    "*.{html,vue,ts,js,cjs,mjs}": [
+    "*.{vue,ts,js,cjs,mjs}": [
       "prettier --write",
       "eslint --fix --max-warnings 0"
+    ],
+    "*.{html,json,json5,md,css,scss}": [
+      "prettier --write"
     ]
   },
   "homepage": "https://github.com/idleRain/vue3-vite-template#readme",
