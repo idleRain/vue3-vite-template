@@ -1,5 +1,6 @@
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { type ConfigEnv, defineConfig, loadEnv } from 'vite'
+import { eslintWatch } from './plugins/plugin-eslint-watch'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import tailwindcss from '@tailwindcss/vite'
@@ -12,6 +13,7 @@ export default ({ mode }: ConfigEnv) => {
   const env = loadEnv(mode, process.cwd())
   const isProd = mode === 'prod'
   const isDev = mode === 'dev'
+  const enableEslint = isDev && env.VITE_ENABLE_ESLINT === 'true'
 
   return defineConfig({
     base: '/',
@@ -19,6 +21,16 @@ export default ({ mode }: ConfigEnv) => {
       vue(),
       tailwindcss(),
       ViteJson5(),
+      // 通过 env.VITE_ENABLE_ESLINT 控制开关，如果设置了编辑器自动 fix 可以关闭
+      ...(enableEslint
+        ? [
+            eslintWatch({
+              include: ['src/**/*.{ts,tsx,vue,js,jsx,mjs,cjs}'],
+              exclude: ['src/components/ui/**', 'typings/**', 'dist/**'],
+              fix: true
+            })
+          ]
+        : []),
       AutoImport({
         imports: ['vue', 'vue-router', 'pinia', 'vue-i18n'],
         dts: 'typings/auto-imports.d.ts',

@@ -144,6 +144,9 @@ importers:
       lint-staged:
         specifier: ^17.0.7
         version: 17.0.7
+      minimatch:
+        specifier: ^10.2.5
+        version: 10.2.5
       prettier:
         specifier: ^3.8.4
         version: 3.8.4

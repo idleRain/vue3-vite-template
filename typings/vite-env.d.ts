@@ -14,4 +14,6 @@ declare interface ImportMetaEnv {
   readonly VITE_APP_LOCALE: SupportedLanguagesType
   // APP 标题
   readonly VITE_APP_TITLE: string
+  // 是否在 dev 时启用 ESLint 自动 fix 插件
+  readonly VITE_ENABLE_ESLINT: 'true' | 'false'
 }
