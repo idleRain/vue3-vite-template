@@ -1,0 +1,21 @@
+{
+  '404': {
+    title: 'Page Not Found',
+    description: "The page you're looking for might have been removed, renamed, or never existed."
+  },
+  '500': {
+    title: 'Server Error',
+    description: 'Something went wrong on our end. Our engineers have been notified.'
+  },
+  '401': {
+    title: 'Unauthorized',
+    description: 'You need to sign in or provide valid credentials to access this page.'
+  },
+  '403': {
+    title: 'Access Denied',
+    description: "You don't have permission to access this resource. Contact your administrator."
+  },
+  goHome: 'Go Home',
+  goBack: 'Go Back',
+  contactSupport: 'If the problem persists, please contact support.'
+}

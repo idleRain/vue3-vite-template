@@ -36,7 +36,7 @@
 ### 1. 克隆项目
 
 ```bash
-git clone https://github.com/idleRain/vue3-vite-temp.git
+git clone https://github.com/idleRain/vue3-vite-template.git
 cd vue3-vite-temp
 ```
 
@@ -70,20 +70,20 @@ npm run preview
 
 ## 📜 可用脚本
 
-| 命令 | 说明 | 环境 |
-|------|------|------|
-| `npm run dev` | 启动开发服务器 | development |
-| `npm run build` | 生产环境构建 | production |
-| `npm run build:test` | 测试环境构建 | test |
-| `npm run build:preview` | 预览环境构建 | preview |
-| `npm run preview` | 预览生产构建 | production |
-| `npm run ts` | TypeScript 类型检查 | - |
-| `npm run lint` | ESLint 检查和修复 | - |
-| `npm run format` | Prettier 代码格式化 | - |
-| `npm run test` | 运行单元测试 | - |
-| `npm run test:ui` | 运行测试并打开 UI 界面 | - |
-| `npm run test:coverage` | 运行测试并生成覆盖率报告 | - |
-| `npm run test:watch` | 监听模式运行测试 | - |
+| 命令                    | 说明                     | 环境        |
+| ----------------------- | ------------------------ | ----------- |
+| `npm run dev`           | 启动开发服务器           | development |
+| `npm run build`         | 生产环境构建             | production  |
+| `npm run build:test`    | 测试环境构建             | test        |
+| `npm run build:preview` | 预览环境构建             | preview     |
+| `npm run preview`       | 预览生产构建             | production  |
+| `npm run ts`            | TypeScript 类型检查      | -           |
+| `npm run lint`          | ESLint 检查和修复        | -           |
+| `npm run format`        | Prettier 代码格式化      | -           |
+| `npm run test`          | 运行单元测试             | -           |
+| `npm run test:ui`       | 运行测试并打开 UI 界面   | -           |
+| `npm run test:coverage` | 运行测试并生成覆盖率报告 | -           |
+| `npm run test:watch`    | 监听模式运行测试         | -           |
 
 ## 📁 项目结构
 
@@ -181,7 +181,7 @@ src/
   <div>
     <!-- 在模板中使用 -->
     <h1>{{ $t('example.title') }}</h1>
-    
+
     <!-- 或在 script 中使用 -->
     <p>{{ t('example.description') }}</p>
   </div>

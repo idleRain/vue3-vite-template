@@ -33,6 +33,7 @@
     "dayjs": "^1.11.21",
     "element-plus": "^2.14.1",
     "embla-carousel-vue": "^8.6.0",
+    "gsap": "^3.15.0",
     "ky": "^2.0.2",
     "mitt": "^3.0.1",
     "nprogress": "^0.2.0",
