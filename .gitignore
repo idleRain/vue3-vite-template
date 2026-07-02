@@ -24,3 +24,10 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+# IDE / AI tools
+.trae
+.claude
+
+# Auto generate
+typings/i18n-schema.d.ts

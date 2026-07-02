@@ -1,9 +1,9 @@
 {
-  "name": "vue3-vite-temp",
-  "version": "1.0.0",
+  "name": "vue3-vite-template",
+  "version": "0.1.0",
   "type": "module",
   "author": "IdleRain",
-  "description": "一个开箱即用且技术栈最新的 Vue + Vite + TypeScript 轻量化项目基础模板",
+  "description": "一个开箱即用且技术栈最新的 Vue + Vite + TypeScript 轻量化项目工程基座",
   "license": "MIT",
   "scripts": {
     "start": "npm run dev",
@@ -105,5 +105,9 @@
   },
   "bugs": {
     "url": "https://github.com/idleRain/vue3-vite-template/issues"
+  },
+  "volta": {
+    "node": "23.11.1",
+    "pnpm": "11.5.3"
   }
 }
