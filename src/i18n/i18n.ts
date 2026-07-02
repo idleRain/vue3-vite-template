@@ -107,7 +107,7 @@ async function loadLocaleMessages(
 
   const message = await localesMap[lang]?.()
   if (message?.default) {
-    i18n.global.setLocaleMessage(lang, message.default)
+    i18n.global.setLocaleMessage(lang, message.default as any)
   }
 
   const mergeMessage = await loadMessages(lang)

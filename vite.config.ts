@@ -1,4 +1,5 @@
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { i18nTypesPlugin } from './plugins/plugin-i18n-types'
 import { type ConfigEnv, defineConfig, loadEnv } from 'vite'
 import { eslintWatch } from './plugins/plugin-eslint-watch'
 import Components from 'unplugin-vue-components/vite'
@@ -21,6 +22,7 @@ export default ({ mode }: ConfigEnv) => {
       vue(),
       tailwindcss(),
       ViteJson5(),
+      i18nTypesPlugin(),
       // 通过 env.VITE_ENABLE_ESLINT 控制开关，如果设置了编辑器自动 fix 可以关闭
       ...(enableEslint
         ? [
