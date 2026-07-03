@@ -3,6 +3,7 @@ import { i18nTypesPlugin } from './plugins/plugin-i18n-types'
 import { type ConfigEnv, defineConfig, loadEnv } from 'vite'
 import { eslintWatch } from './plugins/plugin-eslint-watch'
 import Components from 'unplugin-vue-components/vite'
+import { visualizer } from 'rollup-plugin-visualizer'
 import AutoImport from 'unplugin-auto-import/vite'
 import tailwindcss from '@tailwindcss/vite'
 import ViteJson5 from 'vite-plugin-json5'
@@ -12,9 +13,10 @@ import { resolve } from 'node:path'
 // https://vite.dev/config/
 export default ({ mode }: ConfigEnv) => {
   const env = loadEnv(mode, process.cwd())
-  const isProd = mode === 'prod'
   const isDev = mode === 'dev'
+  const isProd = mode === 'prod'
   const enableEslint = isDev && env.VITE_ENABLE_ESLINT === 'true'
+  const analyze = env.VITE_BUNDLE_ANALYZE === 'true' && !isDev
 
   return defineConfig({
     base: '/',
@@ -49,7 +51,17 @@ export default ({ mode }: ConfigEnv) => {
         deep: true,
         dts: 'typings/components.d.ts',
         resolvers: [ElementPlusResolver()]
-      })
+      }),
+      ...(analyze
+        ? [
+            visualizer({
+              open: true,
+              gzipSize: true,
+              brotliSize: true,
+              filename: 'dist/bundle-report.html'
+            })
+          ]
+        : [])
     ],
     server: {
       port: Number(env.VITE_SERVER_PORT),

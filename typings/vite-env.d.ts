@@ -16,4 +16,6 @@ declare interface ImportMetaEnv {
   readonly VITE_APP_TITLE: string
   // 是否在 dev 时启用 ESLint 自动 fix 插件
   readonly VITE_ENABLE_ESLINT: 'true' | 'false'
+  // 是否启用构建产物 bundle 分析
+  readonly VITE_BUNDLE_ANALYZE: 'true' | 'false'
 }

@@ -78,6 +78,7 @@
     "prettier-plugin-css-order": "^2.2.0",
     "prettier-plugin-sort-imports": "^1.8.11",
     "prettier-plugin-tailwindcss": "^0.8.0",
+    "rollup-plugin-visualizer": "^7.0.1",
     "sass": "^1.100.0",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3",
