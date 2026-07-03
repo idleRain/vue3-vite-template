@@ -4,10 +4,16 @@ import { normalizePath } from 'vite'
 import type { Plugin } from 'vite'
 import JSON5 from 'json5'
 
+/**
+ * 扫描 locales/ 目录生成 typings/i18n-schema.d.ts，同步扩展 vue-i18n 的 DefineLocaleMessage。
+ * 路径约定与运行时 loadLocalesMapFromDir 一致：locales/{lang}/a/b/c.json5 → a.b.c 嵌套结构。
+ */
+
 const LOCALES_DIR = 'src/locales'
 const OUTPUT_FILE = 'typings/i18n-schema.d.ts'
 const REFERENCE_LOCALE = 'zh'
 
+/** 合法标识符不加引号，否则加单引号 */
 function isValidKey(name: string): boolean {
   return /^[a-zA-Z_$][\w$]*$/.test(name)
 }
@@ -16,6 +22,7 @@ function propKey(key: string): string {
   return isValidKey(key) ? key : `'${key}'`
 }
 
+/** 递归生成 TS interface 字符串 */
 export function buildTypeString(obj: unknown, indent = 2): string {
   if (obj === null || obj === undefined) return 'string'
   if (typeof obj === 'number' || typeof obj === 'boolean') return 'string'
@@ -31,6 +38,10 @@ export function buildTypeString(obj: unknown, indent = 2): string {
   return `{\n${entries.join('\n')}\n${' '.repeat(indent - 2)}}`
 }
 
+/**
+ * 递归扫描目录，按文件路径构建嵌套对象。
+ * locales/zh/a/b/example.json5 → { a: { b: { example: content } } }
+ */
 function walk(baseDir: string, currentDir: string, result: Record<string, unknown>): void {
   const entries = readdirSync(currentDir, { withFileTypes: true })
   for (const entry of entries) {
@@ -62,6 +73,9 @@ function walk(baseDir: string, currentDir: string, result: Record<string, unknow
   }
 }
 
+/**
+ * 加载参考语言（zh）目录，生成 typings/i18n-schema.d.ts。
+ */
 export function generate(root: string = process.cwd()): void {
   const langDir = join(root, LOCALES_DIR, REFERENCE_LOCALE)
   if (!existsSync(langDir)) {
@@ -94,10 +108,15 @@ export function generate(root: string = process.cwd()): void {
   console.log(`[i18n-types] locale schema generated → ${OUTPUT_FILE}`)
 }
 
+/**
+ * Vite 插件：configResolved 首扫，configureServer 挂 chokidar 监听。
+ * walk / configResolved / schedule 各有一层 try-catch，单点异常不影响其余文件。
+ */
 export function i18nTypesPlugin(): Plugin {
   let root = ''
   let timer: ReturnType<typeof setTimeout> | null = null
 
+  /** 防抖 200ms */
   function schedule() {
     if (timer) clearTimeout(timer)
     timer = setTimeout(() => {
@@ -122,6 +141,7 @@ export function i18nTypesPlugin(): Plugin {
       }
     },
     configureServer(server) {
+      /** 仅 LOCALES_DIR 下文件变更触发，排除输出文件自触发 */
       const handle = (file: string) => {
         const rel = normalizePath(resolve(file)).slice(root.length + 1)
         if (!rel.startsWith(LOCALES_DIR)) return

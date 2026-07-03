@@ -3,6 +3,7 @@
  *
  * 用法: node --experimental-strip-types scripts/gen-i18n-types.ts
  */
-import { generate } from '../plugins/plugin-i18n-types'
+// @ts-ignore
+import { generate } from '../vite/plugin-i18n-types.ts'
 
 generate()
