@@ -1,5 +1,6 @@
 import { type App as VueApp, createApp } from 'vue'
 import { local } from '@/utils/storage.ts'
+import { startMock } from '@/mocks'
 import { setupI18n } from '@/i18n'
 import router from '@/router'
 import '@/styles/index.css'
@@ -30,10 +31,13 @@ const initErrorLog = (app: VueApp) => {
 }
 
 const bootstrap = async () => {
+  await startMock()
+
   const app = createApp(App)
 
   initColorScheme()
   initErrorLog(app)
+
   await setupI18n(app)
 
   app.use(pinia)

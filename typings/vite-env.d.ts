@@ -18,4 +18,6 @@ declare interface ImportMetaEnv {
   readonly VITE_ENABLE_ESLINT: 'true' | 'false'
   // 是否启用构建产物 bundle 分析
   readonly VITE_BUNDLE_ANALYZE: 'true' | 'false'
+  // 是否启用 MSW Mock 拦截接口请求
+  readonly VITE_ENABLE_MOCK: 'true' | 'false'
 }

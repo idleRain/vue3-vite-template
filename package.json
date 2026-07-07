@@ -74,6 +74,7 @@
     "json5": "^2.2.3",
     "lint-staged": "^17.0.7",
     "minimatch": "^10.2.5",
+    "msw": "^2.14.6",
     "prettier": "^3.8.4",
     "prettier-plugin-css-order": "^2.2.0",
     "prettier-plugin-sort-imports": "^1.8.11",
@@ -110,5 +111,10 @@
   "volta": {
     "node": "23.11.1",
     "pnpm": "11.5.3"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

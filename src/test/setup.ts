@@ -1,4 +1,6 @@
-import { beforeEach, vi } from 'vitest'
+import { afterAll, beforeAll, beforeEach, vi } from 'vitest'
+import { mockConfig } from '@/mocks/config'
+import { server } from '@/mocks/server'
 
 // 创建内存存储模拟
 const createStorageMock = () => {
@@ -45,13 +47,26 @@ Object.defineProperty(window, 'location', {
   writable: true
 })
 
-// 模拟 fetch API
-global.fetch = vi.fn()
+// 测试套件启动时开启 MSW server，接管 fetch 请求拦截
+// 同时强制启用所有 mock（无视 config.ts 中可能设为 false 的值），
+// 避免 jsdom 环境尝试真实网络请求导致测试失败
+beforeAll(() => {
+  for (const key of Object.keys(mockConfig)) {
+    ;(mockConfig as Record<string, boolean>)[key] = true
+  }
+  server.listen({ onUnhandledRequest: 'bypass' })
+})
 
-// 每个测试前重置所有 mock
+// 每个测试用例间重置 handler，确保测试隔离
 beforeEach(() => {
   vi.clearAllMocks()
   localStorageMock.clear()
   sessionStorageMock.clear()
   locationMock.href = 'http://localhost:3000'
+  server.resetHandlers()
+})
+
+// 测试套件结束后关闭 MSW server
+afterAll(() => {
+  server.close()
 })
