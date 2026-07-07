@@ -21,7 +21,8 @@
     "format": "prettier --write \"src/**/*.{html,vue,ts,js,cjs,mjs}\"",
     "lint": "eslint src --fix --ext .ts,.tsx,.vue,.js,.jsx --max-warnings 0",
     "prepare": "husky",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "check": "node --experimental-strip-types scripts/check.ts"
   },
   "dependencies": {
     "@internationalized/date": "^3.12.2",
