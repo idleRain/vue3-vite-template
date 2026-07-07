@@ -20,6 +20,8 @@ version of every tool that matters, wires them up with actual engineering discip
 - `useRequest` composable: wraps any async function with `data / loading / error` state
 - ky-based HTTP layer with a pluggable hook pipeline (auth, business code, cache busting, error toast); retry, timeout,
   headers sit on the ky instance itself
+- MSW-based mock layer: handler-level toggle, zero code change to switch between mock and real API; `config.ts` is the single
+  source of truth — set `false` to bypass, HMR takes effect immediately
 - Production build drops `console` / `debugger`, stripped by `oxc` minifier
 - Data-heavy UI wired up: @tanstack/vue-table for tables, vee-validate + zod for forms
 
@@ -75,6 +77,25 @@ api/
 
 Components never see HTTP. They call `API.example.getHello()`. `useRequest` handles the loading/error state so you're
 never writing `const loading = ref(true)` by hand.
+
+### Mock: data / routing / config, three layers separated
+
+```
+mocks/
+├── config.ts       # Per-endpoint toggle map, typed via as const satisfies
+├── helpers.ts      # guard(key, factory) — reads config, returns mock or bypass()
+├── data/           # Response bodies (what to return)
+├── handlers/       # Route definitions (which URL maps to which data)
+├── browser.ts      # setupWorker (dev mode)
+└── server.ts       # setupServer (test mode)
+```
+
+Each handler wraps a mock factory with `guard()` — when `config.ts` says `true`, MSW intercepts and returns the mock; when
+`false`, `bypass()` lets the request through to the real network. The ky hook pipeline (auth, business code, error toast)
+runs normally regardless — MSW sits at the `fetch` level, transparent to the services layer.
+
+Tests use the same handlers. `setup.ts` forces all config entries to `true` so a config change in dev can't silently break
+tests.
 
 ### i18n: file structure is the schema
 
@@ -135,6 +156,7 @@ space. The dark variant is a single `@custom-variant dark` declaration.
 src/
 ├── api/            # Endpoint declarations
 ├── services/       # HTTP client, hooks, types
+├── mocks/          # MSW handlers, config, data — three-layer mock
 ├── store/          # Pinia modules
 ├── composables/    # useRequest, useClickPosition, ...
 ├── components/     # Auto-imported, including ui/ (shadcn-vue)
