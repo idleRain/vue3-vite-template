@@ -66,7 +66,8 @@
     "src", // src 下的所有文件
     "typings", // 全局类型声明
     "vitest.config.ts", // Vitest 配置文件
-    "vite.config.ts" // Vite 配置文件
+    "vite.config.ts", // Vite 配置文件
+    "scripts" // 脚本
   ],
   // 排除在编译之外的目录
   "exclude": [
